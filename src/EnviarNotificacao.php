@@ -33,7 +33,7 @@ class EnviarNotificacao
                 'Content-Type'  => 'application/json'
             ];
 
-            $response = $this->client->withHeaders($headers)->post($this->url_firebase, $data);
+            $response = $this->client::withHeaders($headers)->post($this->url_firebase, $data);
 
             array_push($messages_callback, [ 'user_token' => $user, 'callback' => $response ]);
         }
