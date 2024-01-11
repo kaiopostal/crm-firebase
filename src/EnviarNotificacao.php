@@ -2,16 +2,18 @@
 
 namespace Kaiopostal\CRMFirebase;
 
-use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class EnviarNotificacao
 {
-    const BASE_ENDPOINT = 'https://fcm.googleapis.com/v1/projects/push-notification-2cb1f/messages:send';
-    public function __construct(
-        private  Client $client = new Client()
-    ){}
+    private string $url_firebase;
 
-    private function enviaNotificacao(array $conteudo, array $userTokens): array
+    public function __construct(string $url)
+    {
+        $this->url_firebase = $url;
+    }
+
+    public function enviaNotificacao(array $conteudo, array $userTokens): array
     {
         $messages_callback = [];
 
@@ -20,30 +22,29 @@ class EnviarNotificacao
                 "message" => [
                     "token"        => $user['token'],
                     "notification" => [
-                        "title" => $conteudo['titulo'],
-                        "body"  => $conteudo['descricao']
+                        "title" => $conteudo['title'],
+                        "body"  => $conteudo['body']
                     ]
                 ]
             ];
 
+            $headers = [
+                'Authorization' => 'Bearer ' . $this->getGoogleAccessToken(),
+                'Content-Type'  => 'application/json'
+            ];
 
-            $response = $this->client->post(self::BASE_ENDPOINT, [
-                'body' => [$data],
-                'headers' => [
-                    'Authorization' => 'Bearer ' . static::getGoogleAccessToken(),
-                    'Content-Type'  => 'application/json'
-                ]
-            ])->getBody()->getContents();
+            $cliente = new Http();
 
-            array_push($messages_callback, ['user_token' => $user, 'callback' => $response]);
+            $response = $cliente->withHeaders($headers)->post($this->url_firebase, $data);
+
+            array_push($messages_callback, [ 'user_token' => $user, 'callback' => $response ]);
         }
-
 
         return $messages_callback;
     }
 
 
-    private static function getGoogleAccessToken()
+    private function getGoogleAccessToken()
     {
         $client = new \Google\Client();
         $client->useApplicationDefaultCredentials(); // Recupera o valor da variável GOOGLE_APPLICATION_CREDENTIALS no .env
@@ -53,7 +54,6 @@ class EnviarNotificacao
 
         return $token['access_token'];
     }
-
 
 
 }

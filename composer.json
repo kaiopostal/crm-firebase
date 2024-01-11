@@ -23,7 +23,7 @@
         }
     },
     "require": {
-        "guzzlehttp/guzzle": "^7.8",
-        "google/apiclient": "^2.15.0"
+        "google/apiclient": "^2.15.0",
+        "illuminate/http": "^10.40"
     }
 }

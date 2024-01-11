@@ -38,17 +38,3 @@ expect()->extend('toBeOne', function () {
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
-
-function getResponseClient()
-{
-    $handler = new \GuzzleHttp\Handler\MockHandler();
-
-    $handler->append(new \GuzzleHttp\Psr7\Response(
-        status: 200,
-        body:'{"_id": "ZsD4Hq1Z5",  "content": "Look up at the stars and not down at your feet. Try to make sense of what you see, and wonder about what makes the universe exist. Be curious.",  "author": "Stephen Hawking",  "tags": ["Inspirational"  ],"authorSlug": "stephen-hawking",  "length": 142, "dateAdded": "2019-03-15", "dateModified": "2023-04-14"}'
-    ));
-
-    return new \GuzzleHttp\Client([
-        'handler' => $handler
-    ]);
-}
