@@ -7,10 +7,12 @@ use Illuminate\Support\Facades\Http;
 class EnviarNotificacao
 {
     private string $url_firebase;
+    private        $client;
 
-    public function __construct(string $url)
+    public function __construct(string $url, $client)
     {
         $this->url_firebase = $url;
+        $this->client       = $client;
     }
 
     public function enviaNotificacao(array $conteudo, array $userTokens): array
@@ -33,9 +35,7 @@ class EnviarNotificacao
                 'Content-Type'  => 'application/json'
             ];
 
-            $cliente = new Http();
-
-            $response = $cliente->withHeaders($headers)->post($this->url_firebase, $data);
+            $response = $this->client->withHeaders($headers)->post($this->url_firebase, $data);
 
             array_push($messages_callback, [ 'user_token' => $user, 'callback' => $response ]);
         }

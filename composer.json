@@ -23,7 +23,6 @@
         }
     },
     "require": {
-        "google/apiclient": "^2.15.0",
-        "illuminate/http": "^10.40"
+        "google/apiclient": "^2.15.0"
     }
 }
