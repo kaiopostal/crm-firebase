@@ -2,8 +2,6 @@
 
 namespace Kaiopostal\CRMFirebase;
 
-use Illuminate\Support\Facades\Http;
-
 class EnviarNotificacao
 {
     private string $url_firebase;
