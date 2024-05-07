@@ -44,8 +44,8 @@ class EnviarNotificacao
 
     private function getGoogleAccessToken()
     {
-        $client = new \Google\Client();
-        $client->useApplicationDefaultCredentials(); // Recupera o valor da variável GOOGLE_APPLICATION_CREDENTIALS no .env
+        $client = new \Google\Client();        
+        $client->setAuthConfig(config('objetivo.firebase_credentials'));
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
         $client->fetchAccessTokenWithAssertion();
         $token = $client->getAccessToken();
